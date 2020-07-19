@@ -4,9 +4,9 @@ from classes import Physics, Renderer, Controller, Player
 
 
 class WindyPathEngine(IEngine.IEngine):
-    def __init__(self, values: dict, player: Player, wait=0.016):
+    def __init__(self, values: dict, player: Player, goal, wait=0.016):
 
-        self.physic = Physics.Wind(values, (player,))
+        self.physic = Physics.Wind(values, (player,), (-5, 4), (-5, 4))
 
         self.renderer = Renderer.WinyPathRenderer(
             len(values.keys()), list(values.values()), 700, 700)
@@ -27,7 +27,7 @@ class WindyPathEngine(IEngine.IEngine):
             self.controller.getKeyboardInput()
             self.physic.apply()
             # self.AI.apply()
-            time.sleep(self.wait)
+            # time.sleep(self.wait)
 
     def resetGame(self):
         pass
