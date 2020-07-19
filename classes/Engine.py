@@ -1,49 +1,33 @@
 from interfaces import IEngine
 import time
-from classes import Physics, Renderer, Controller
+from classes import Physics, Renderer, Controller, Player
 
 
-class WindyPathEngine(IEngine):
-    def __init__(self, physic=None, renderer=None, AI=None, controller=None, wait=0.016):
+class WindyPathEngine(IEngine.IEngine):
+    def __init__(self, values: dict, player: Player, wait=0.016):
 
-        if physic == None:
-            self.physic = Physics.Wind()
-        else:
-            self.physic = physic
+        self.physic = Physics.Wind(values, (player,))
 
-        if renderer == None:
-            self.renderer = Renderer.WinyPathRenderer()
-        else:
-            self.renderer = renderer
-
+        self.renderer = Renderer.WinyPathRenderer(
+            len(values.keys()), list(values.values()), 700, 700)
+        self.renderer.addObject(player)
         # if AI == None:
         #     self.AI = AI.WinyPathRenderer()
         # else:
         #     self.AI = AI
 
-        if controller == None:
-            self.controller = Controller.WinyPathController()
-        else:
-            self.controller = controller
+        self.controller = Controller.WinyPathController(player)
 
         self.wait = wait
 
     def run(self):
         self.renderer.draw_board()
         while True:
-            self.physic.apply()
             self.renderer.draw_frame()
+            self.controller.getKeyboardInput()
+            self.physic.apply()
             # self.AI.apply()
             time.sleep(self.wait)
-
-    def addPhysics(self, physic: IPhysic):
-        self.physic = physic
-
-    def addRenderer(self, renderer: IRenderer):
-        self.renderer = renderer
-
-    def addAI(self, AI):
-        self.AI = AI
 
     def resetGame(self):
         pass

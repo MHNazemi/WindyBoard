@@ -59,7 +59,7 @@ class WinyPathRenderer(IRenderer):
                 self.t_.pendown()
                 self.t_.setpos(o_.x*self.step + self.step//2,
                                o_.y*self.step + self.step//2)
-
+                o_.updateOld()
                 o_.clearNewStatus()
 
     def addObject(self, obj):

@@ -8,21 +8,23 @@ class Player:
         self.updated = False
 
     def updatePostion(self, x, y):
-        self.oldX = self.x
-        self.oldY = self.y
         self.x = x
         self.y = y
         self.updated = True
 
     def moveX(self, x):
-        self.oldX = self.x
+
         self.x += x
         self.updated = True
 
     def moveY(self, y):
-        self.oldY = self.y
+
         self.y += y
         self.updated = True
+
+    def updateOld(self):
+        self.oldY = self.y
+        self.oldX = self.x
 
     def isUpdated(self):
         self.updated = False
