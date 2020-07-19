@@ -3,6 +3,7 @@ from interfaces.IRenderer import IRenderer
 import uuid
 import time
 import turtle
+import math
 
 
 class WinyPathRenderer(IRenderer):
@@ -11,7 +12,7 @@ class WinyPathRenderer(IRenderer):
         self.s_.setup(screenX, screenY)
 
         self.t_ = turtle.Turtle()
-
+        # self.t_.shape("circle")
         self.t_.speed(0)
 
         self.cellCounts = cellCounts
@@ -59,6 +60,31 @@ class WinyPathRenderer(IRenderer):
                 self.t_.pendown()
                 self.t_.setpos(o_.x*self.step + self.step//2,
                                o_.y*self.step + self.step//2)
+
+                difX = o_.x - o_.oldX
+                difY = o_.y - o_.oldY
+
+                if difX != 0:
+                    if difY != 0:
+                        angel = math.degrees(math.tanh(abs(difY) / abs(difX)))
+                        if difX > 0 and difY < 0:
+                            angel = 360-angel
+                        elif difX < 0 and difY > 0:
+                            angel = 90+angel
+                        elif difX < 0 and difY < 0:
+                            angel = 180+angel
+                    else:
+                        if difX > 0:
+                            angel = 0
+                        else:
+                            angel = 180
+                else:
+                    if difY > 0:
+                        angel = 90
+                    else:
+                        angel = 270
+
+                self.t_.setheading(angel)
                 o_.updateOld()
                 o_.clearNewStatus()
 

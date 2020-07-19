@@ -1,7 +1,7 @@
-from interfaces import IPhysic
+from interfaces import IPhysics
 
 
-class Wind(IPhysic.IPhysic):
+class WindPhysics(IPhysics.IPhysics):
     def __init__(self, values, objects, x_range, y_range):
         self.values = values
         self.objects = objects
