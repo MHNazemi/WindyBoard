@@ -25,6 +25,16 @@ class WinyPathController(IController.I2DController):
             print("Invalid Input! Try again")
             i = getch().decode()
 
+    def getAutomatedController(self, inp):
+        if inp.lower() == "w":
+            self.obj.moveY(1)
+        elif inp.lower() == "d":
+            self.obj.moveX(1)
+        elif inp.lower() == "s":
+            self.obj.moveY(-1)
+        elif inp.lower() == "a":
+            self.obj.moveX(-1)
+
 
 class _Getch:
     """Gets a single character from standard input.  Does not echo to the screen."""

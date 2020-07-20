@@ -27,4 +27,4 @@ class WindPhysics(IPhysics.IPhysics):
         elif not self.y_range[1] >= y:
             y = self.y_range[1]
 
-        o.updatePostion(x, y)
+        o.updatePosition(x, y)

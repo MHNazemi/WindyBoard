@@ -7,13 +7,15 @@ import math
 
 
 class WinyPathRenderer(IRenderer):
-    def __init__(self, cellCounts, numbers, screenX, screenY):
+    def __init__(self, initPos, goalPos, cellCounts, numbers, screenX, screenY):
         self.s_ = turtle.Screen()
         self.s_.setup(screenX, screenY)
 
         self.t_ = turtle.Turtle()
         # self.t_.shape("circle")
         self.t_.speed(0)
+        self.initPos = initPos
+        self.goalPos = goalPos
 
         self.cellCounts = cellCounts
         self.numbers = numbers
@@ -21,8 +23,8 @@ class WinyPathRenderer(IRenderer):
         self.lenght = 600
         self.objects = dict()
 
-    def draw_board(self):
-
+    def draw_board(self, color="black"):
+        self.t_.color(color)
         STEP = self.lenght // self.cellCounts
         self.step = STEP
         j = 0
@@ -45,7 +47,13 @@ class WinyPathRenderer(IRenderer):
             j += 1
 
         self.t_.penup()
-        self.t_.setpos(0, 0)
+        self.t_.setpos(self.goalPos[0]*STEP + STEP //
+                       2, self.goalPos[1]*STEP + STEP//2)
+        self.t_.pendown()
+        self.t_.write("X")
+
+        self.t_.penup()
+        self.t_.setpos(self.initPos[0], self.initPos[1])
 
     def clear_screen(self):
         self.t_.clear()
@@ -54,9 +62,9 @@ class WinyPathRenderer(IRenderer):
         for o_ in self.objects.values():
             if o_.isUpdated:
                 self.t_.penup()
-                self.t_.color(o_.color)
                 self.t_.setpos(o_.oldX*self.step + self.step//2,
                                o_.oldY*self.step + self.step//2)
+                self.t_.color(o_.color)
                 self.t_.pendown()
                 self.t_.setpos(o_.x*self.step + self.step//2,
                                o_.y*self.step + self.step//2)
