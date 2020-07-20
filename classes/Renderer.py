@@ -60,7 +60,7 @@ class WinyPathRenderer(IRenderer):
 
     def draw_frame(self):
         for o_ in self.objects.values():
-            if o_.isUpdated:
+            if o_.isUpdated():
                 self.t_.penup()
                 self.t_.setpos(o_.oldX*self.step + self.step//2,
                                o_.oldY*self.step + self.step//2)

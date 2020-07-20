@@ -63,11 +63,25 @@ class WindyPathEngine(IEngine.IEngine):
         self.physics.apply()
 
     def apply_AI(self, reward):
-        return self.AI.apply(reward)
+        r = (-5, 4)
+        x, y = self.player.getCurrentPos()
+        exclude = []
+        if x == r[0]:
+            exclude.append("a")
+        elif x == r[1]:
+            exclude.append("d")
+
+        if y == r[0]:
+            exclude.append("s")
+        elif y == r[1]:
+            exclude.append("w")
+
+        return self.AI.apply(reward, exclude)
 
     def resetGame(self, reward):
         self.player.updatePosition(self.initPos[0], self.initPos[1])
         self.renderer.clear_screen()
         self.AI.endEpisode(reward)
         self.player.updatePosition(self.initPos[0], self.initPos[1])
+        self.player.updateOld()
         self.player.clearNewStatus()

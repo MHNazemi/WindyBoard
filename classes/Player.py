@@ -27,7 +27,7 @@ class Player:
         self.oldX = self.x
 
     def isUpdated(self):
-        self.updated = False
+        return self.updated
 
     def getOldPos(self):
         return self.oldX, self.oldY
