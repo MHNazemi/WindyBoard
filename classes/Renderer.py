@@ -11,9 +11,13 @@ class WinyPathRenderer(IRenderer):
         self.s_ = turtle.Screen()
         self.s_.setup(screenX, screenY)
 
-        self.t_ = turtle.Turtle()
-        # self.t_.shape("circle")
-        self.t_.speed(0)
+        self.boardPen = turtle.Turtle()
+        self.playerPen = turtle.Turtle()
+        # self.boardPen.shape("circle")
+        self.boardPen.speed(0)
+        self.boardPen.hideturtle()
+        self.playerPen.speed(0)
+
         self.initPos = initPos
         self.goalPos = goalPos
 
@@ -24,50 +28,53 @@ class WinyPathRenderer(IRenderer):
         self.objects = dict()
 
     def draw_board(self, color="black"):
-        self.t_.color(color)
+        self.boardPen.color(color)
         STEP = self.lenght // self.cellCounts
         self.step = STEP
         j = 0
         for i in range(0, self.lenght+1, STEP):
 
-            self.t_.penup()
-            self.t_.setpos(-self.lenght/2, self.lenght/2 - i)
-            self.t_.pendown()
-            self.t_.setpos(self.lenght/2, self.lenght/2 - i)
-            self.t_.penup()
-            self.t_.setpos(-self.lenght/2 + i, self.lenght/2)
-            self.t_.pendown()
-            self.t_.setpos(-self.lenght/2 + i, -self.lenght/2)
+            self.boardPen.penup()
+            self.boardPen.setpos(-self.lenght/2, self.lenght/2 - i)
+            self.boardPen.pendown()
+            self.boardPen.setpos(self.lenght/2, self.lenght/2 - i)
+            self.boardPen.penup()
+            self.boardPen.setpos(-self.lenght/2 + i, self.lenght/2)
+            self.boardPen.pendown()
+            self.boardPen.setpos(-self.lenght/2 + i, -self.lenght/2)
 
-            self.t_.penup()
-            self.t_.setpos(-self.lenght/2 + STEP//2 +
-                           i, -self.lenght/2 + STEP//2)
+            self.boardPen.penup()
+            self.boardPen.setpos(-self.lenght/2 + STEP//2 +
+                                 i, -self.lenght/2 + STEP//2)
             if j < len(self.numbers):
-                self.t_.write(self.numbers[j])
+                self.boardPen.write(self.numbers[j])
             j += 1
 
-        self.t_.penup()
-        self.t_.setpos(self.goalPos[0]*STEP + STEP //
-                       2, self.goalPos[1]*STEP + STEP//2)
-        self.t_.pendown()
-        self.t_.write("X")
+        self.boardPen.penup()
+        self.boardPen.setpos(self.goalPos[0]*STEP + STEP //
+                             2, self.goalPos[1]*STEP + STEP//2)
+        self.boardPen.pendown()
+        self.boardPen.write("X")
 
-        self.t_.penup()
-        self.t_.setpos(self.initPos[0], self.initPos[1])
+        self.boardPen.penup()
+        self.boardPen.setpos(self.initPos[0], self.initPos[1])
 
     def clear_screen(self):
-        self.t_.clear()
+        self.boardPen.clear()
+
+    def clear_player(self):
+        self.playerPen.clear()
 
     def draw_frame(self):
         for o_ in self.objects.values():
             if o_.isUpdated():
-                self.t_.penup()
-                self.t_.setpos(o_.oldX*self.step + self.step//2,
-                               o_.oldY*self.step + self.step//2)
-                self.t_.color(o_.color)
-                self.t_.pendown()
-                self.t_.setpos(o_.x*self.step + self.step//2,
-                               o_.y*self.step + self.step//2)
+                self.playerPen.penup()
+                self.playerPen.setpos(o_.oldX*self.step + self.step//2,
+                                      o_.oldY*self.step + self.step//2)
+                self.playerPen.color(o_.color)
+                self.playerPen.pendown()
+                self.playerPen.setpos(o_.x*self.step + self.step//2,
+                                      o_.y*self.step + self.step//2)
 
                 difX = o_.x - o_.oldX
                 difY = o_.y - o_.oldY
@@ -92,7 +99,7 @@ class WinyPathRenderer(IRenderer):
                     else:
                         angel = 270
 
-                self.t_.setheading(angel)
+                self.playerPen.setheading(angel)
                 o_.updateOld()
                 o_.clearNewStatus()
 

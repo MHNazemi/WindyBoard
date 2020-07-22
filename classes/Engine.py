@@ -16,7 +16,7 @@ class WindyPathEngine(IEngine.IEngine):
         self.player.updatePosition(initPos[0], initPos[1])
         self.initPos = initPos
         # self.AI = AI.MC(player, 100, ("w", "d", "s", "a"))
-        self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .8, .9)
+        self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .4, .9)
 
         self.controller = Controller.WinyPathController(player)
 
@@ -47,7 +47,7 @@ class WindyPathEngine(IEngine.IEngine):
                 self.resetGame(reward)
                 finished = False
                 reward = None
-                self.apply_init()
+                # self.apply_init()
                 continue
             action = self.apply_AI(reward)
             self.apply_controller(action)
@@ -94,7 +94,7 @@ class WindyPathEngine(IEngine.IEngine):
 
     def resetGame(self, reward):
         self.player.updatePosition(self.initPos[0], self.initPos[1])
-        self.renderer.clear_screen()
+        self.renderer.clear_player()
         self.AI.endEpisode(reward)
         self.player.updatePosition(self.initPos[0], self.initPos[1])
         self.player.updateOld()
