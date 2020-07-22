@@ -15,7 +15,8 @@ class WindyPathEngine(IEngine.IEngine):
 
         self.player.updatePosition(initPos[0], initPos[1])
         self.initPos = initPos
-        self.AI = AI.MC(player, 100, ("w", "d", "s", "a"))
+        # self.AI = AI.MC(player, 100, ("w", "d", "s", "a"))
+        self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .8, .9)
 
         self.controller = Controller.WinyPathController(player)
 
@@ -23,13 +24,26 @@ class WindyPathEngine(IEngine.IEngine):
         self.goal = goal
 
     def run(self):
+        inp = input("for how many episodes?\npress m for manual: ")
+        count = 0
+        if inp != "m":
+            try:
+                count = int(inp)
+            except:
+                pass
+
         self.apply_init()
         finished, reward = self.apply_logic()
         reward = None
+        episodes = 1
         while True:
             self.apply_renderer()
             if finished:
-                input("finished!")
+                print(episodes)
+                episodes += 1
+                count -= 1
+                if count == 0:
+                    input("Episode is finished. Press Enter for next episode.")
                 self.resetGame(reward)
                 finished = False
                 reward = None
