@@ -142,6 +142,77 @@ class Sarsa(IAi.IAi):
 
         if reward is not None:
             self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
+                self.Q[currentState][selectedArg]) - self.Q[self.prevState][self.prevAction])
+
+        self.prevAction = selectedArg
+        self.prevState = currentState
+
+        return action
+
+    def endEpisode(self, reward):
+        # x, y = self.player.getCurrentPos()
+        # currentState = self.states[str(x)+str(y)]
+        # self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
+        #     self.Q[currentState][selectedArg] - self.Q[self.prevState][self.prevAction]))
+        self.k += 1
+
+
+class Sarsa_eligibility(IAi.IAi):
+    def __init__(self, player, s, a, alpha, l, el):
+        self.s = s
+        self.a = a
+        self.alpha = alpha
+        self.l = l
+        self.el = el
+        self.Q = np.zeros((s, len(a)))
+        self.E = np.zeros((s, len(a)))
+        self.k = 1
+        self.player = player
+
+        self.states = {}
+        self.actions = {}
+        self.reversedActions = {}
+        r = math.sqrt(self.s)
+        i = 0
+        for x in range(-int(r//2), int(r//2)):
+            for y in range(-int(r//2), int(r//2)):
+                self.states[str(x)+str(y)] = i
+                i += 1
+
+        i = 0
+        for a_ in a:
+            self.actions[a_] = i
+            self.reversedActions[i] = a_
+            i += 1
+
+    def apply(self, reward=None, exclude=[]):
+        x, y = self.player.getCurrentPos()
+        currentState = self.states[str(x)+str(y)]
+        args = list(np.argsort(-self.Q[currentState]))
+        for e_ in exclude:
+            args.remove(self.actions[e_])
+
+        r = random.random()
+        if r > 1/self.k:
+            # greedy
+            valMax = self.Q[currentState][args[0]]
+            candidates = []
+            for arg in args:
+                if self.Q[currentState][arg] == valMax:
+                    candidates.append(arg)
+
+            selectedArg = random.choice(candidates)
+            action = self.reversedActions[selectedArg]
+        else:
+            # random
+            selectedArg = random.choice(args)
+            action = self.reversedActions[selectedArg]
+
+        if reward is not None:
+
+            # delta = reward + +self.l*()
+
+            self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
                 self.Q[currentState][selectedArg] - self.Q[self.prevState][self.prevAction]))
 
         self.prevAction = selectedArg
@@ -150,4 +221,8 @@ class Sarsa(IAi.IAi):
         return action
 
     def endEpisode(self, reward):
+        # x, y = self.player.getCurrentPos()
+        # currentState = self.states[str(x)+str(y)]
+        # self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
+        #     self.Q[currentState][selectedArg] - self.Q[self.prevState][self.prevAction]))
         self.k += 1
