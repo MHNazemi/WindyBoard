@@ -2,6 +2,7 @@ from interfaces import IAi
 import numpy as np
 import math
 import random
+import copy
 
 
 class MC(IAi.IAi):
@@ -150,10 +151,9 @@ class Sarsa(IAi.IAi):
         return action
 
     def endEpisode(self, reward):
-        # x, y = self.player.getCurrentPos()
-        # currentState = self.states[str(x)+str(y)]
-        # self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
-        #     self.Q[currentState][selectedArg] - self.Q[self.prevState][self.prevAction]))
+        x, y = self.player.getCurrentPos()
+        currentState = self.states[str(x)+str(y)]
+        self.Q[self.prevState][self.prevAction] += self.alpha*(reward)
         self.k += 1
 
 
@@ -209,11 +209,13 @@ class Sarsa_eligibility(IAi.IAi):
             action = self.reversedActions[selectedArg]
 
         if reward is not None:
+            delta = reward + self.l * np.clip(
+                self.Q[currentState][selectedArg] -
+                self.Q[self.prevState][self.prevAction], -1, 1)
 
-            # delta = reward + +self.l*()
-
-            self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
-                self.Q[currentState][selectedArg] - self.Q[self.prevState][self.prevAction]))
+            self.E[currentState][selectedArg] += 1
+            self.Q += self.alpha * delta * self.E
+            self.E = self.l * self.el * self.E
 
         self.prevAction = selectedArg
         self.prevState = currentState
@@ -221,8 +223,16 @@ class Sarsa_eligibility(IAi.IAi):
         return action
 
     def endEpisode(self, reward):
-        # x, y = self.player.getCurrentPos()
-        # currentState = self.states[str(x)+str(y)]
+        x, y = self.player.getCurrentPos()
+        currentState = self.states[str(x)+str(y)]
         # self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
         #     self.Q[currentState][selectedArg] - self.Q[self.prevState][self.prevAction]))
+
+        delta = reward
+
+        self.Q += self.alpha * delta * self.E
+        self.E = self.l*self.el * self.E
+
+        self.E = np.zeros((self.s, len(self.a)))
+
         self.k += 1

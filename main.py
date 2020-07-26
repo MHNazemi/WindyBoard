@@ -5,7 +5,7 @@ from classes import Engine
 windPower = {-5: 0, -4: 0, -3: 0, -2: 1, -
              1: 1, 0: 1, 1: 2, 2: 2, 3: 1, 4: 0}
 
-goal = (4, 3)
+goal = (2, 0)
 initPos = (-4, 0)
 
 p = Player(x=-5, y=0)

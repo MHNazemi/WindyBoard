@@ -16,7 +16,9 @@ class WindyPathEngine(IEngine.IEngine):
         self.player.updatePosition(initPos[0], initPos[1])
         self.initPos = initPos
         # self.AI = AI.MC(player, 100, ("w", "d", "s", "a"))
-        self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .4, .9)
+        # self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .2, .9)
+        self.AI = AI.Sarsa_eligibility(
+            player, 100, ("w", "d", "s", "a"), .2, .9, .2)
 
         self.controller = Controller.WinyPathController(player)
 
@@ -37,7 +39,8 @@ class WindyPathEngine(IEngine.IEngine):
         reward = None
         episodes = 1
         while True:
-            self.apply_renderer()
+            if count <= 0:
+                self.apply_renderer()
             if finished:
                 print(episodes)
                 episodes += 1
@@ -63,7 +66,7 @@ class WindyPathEngine(IEngine.IEngine):
     def apply_logic(self):
         x, y = self.player.getCurrentPos()
         if x == self.goal[0] and y == self.goal[1]:
-            return True, 0
+            return True, 100
         else:
             return False, -1
 
