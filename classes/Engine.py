@@ -17,8 +17,9 @@ class WindyPathEngine(IEngine.IEngine):
         self.initPos = initPos
         # self.AI = AI.MC(player, 100, ("w", "d", "s", "a"))
         # self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .2, .9)
-        self.AI = AI.Sarsa_eligibility(
-            player, 100, ("w", "d", "s", "a"), .2, .9, .2)
+        # self.AI = AI.Sarsa_eligibility(
+        #     player, 100, ("w", "d", "s", "a"), .2, .9, .2)
+        self.AI = AI.Q_Learning(player, 100, ("w", "d", "s", "a"), .1, .9)
 
         self.controller = Controller.WinyPathController(player)
 
@@ -66,7 +67,7 @@ class WindyPathEngine(IEngine.IEngine):
     def apply_logic(self):
         x, y = self.player.getCurrentPos()
         if x == self.goal[0] and y == self.goal[1]:
-            return True, 100
+            return True, 1
         else:
             return False, -1
 

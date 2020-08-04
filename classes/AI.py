@@ -243,7 +243,7 @@ class Q_Learning(IAi.IAi):
         self.s = s
         self.a = a
         self.alpha = alpha
-        self.l = l
+        self.gamma = gamma
         self.Q = np.zeros((s, len(a)))
         self.k = 1
         self.player = player
@@ -288,8 +288,8 @@ class Q_Learning(IAi.IAi):
             action = self.reversedActions[selectedArg]
 
         if reward is not None:
-            self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.l*(
-                self.Q[currentState][selectedArg]) - self.Q[self.prevState][self.prevAction])
+            self.Q[self.prevState][self.prevAction] += self.alpha*(reward + self.gamma*(
+                np.max(self.Q[currentState])) - self.Q[self.prevState][self.prevAction])
 
         self.prevAction = selectedArg
         self.prevState = currentState
