@@ -16,10 +16,10 @@ class WindyPathEngine(IEngine.IEngine):
         self.player.updatePosition(initPos[0], initPos[1])
         self.initPos = initPos
         # self.AI = AI.MC(player, 100, ("w", "d", "s", "a"))
-        # self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .2, .9)
+        self.AI = AI.Sarsa(player, 100, ("w", "d", "s", "a"), .1, .9)
         # self.AI = AI.Sarsa_eligibility(
         #     player, 100, ("w", "d", "s", "a"), .2, .9, .2)
-        self.AI = AI.Q_Learning(player, 100, ("w", "d", "s", "a"), .1, .9)
+        # self.AI = AI.Q_Learning(player, 100, ("w", "d", "s", "a"), .2, .9)
 
         self.controller = Controller.WinyPathController(player)
 
@@ -46,7 +46,8 @@ class WindyPathEngine(IEngine.IEngine):
                 print(episodes)
                 episodes += 1
                 count -= 1
-                if count == 0:
+                if count <= 0:
+                    self.renderer.draw_result(self.AI.getPolicy())
                     input("Episode is finished. Press Enter for next episode.")
                 self.resetGame(reward)
                 finished = False
@@ -54,6 +55,8 @@ class WindyPathEngine(IEngine.IEngine):
                 # self.apply_init()
                 continue
             action = self.apply_AI(reward)
+            if count <= 0:
+                print(action)
             self.apply_controller(action)
             self.apply_physics()
             finished, reward = self.apply_logic()
@@ -97,9 +100,9 @@ class WindyPathEngine(IEngine.IEngine):
         return self.AI.apply(reward, exclude)
 
     def resetGame(self, reward):
+        self.AI.endEpisode(reward)
         self.player.updatePosition(self.initPos[0], self.initPos[1])
         self.renderer.clear_player()
-        self.AI.endEpisode(reward)
         self.player.updatePosition(self.initPos[0], self.initPos[1])
         self.player.updateOld()
         self.player.clearNewStatus()

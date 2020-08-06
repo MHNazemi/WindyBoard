@@ -156,6 +156,31 @@ class Sarsa(IAi.IAi):
         self.Q[self.prevState][self.prevAction] += self.alpha*(reward)
         self.k += 1
 
+    def getPolicy(self):
+
+        matrixLenght = int(math.sqrt(self.s))
+        policy = [["" for j in range(matrixLenght)]
+                  for i in range(matrixLenght)]
+        # policy = np.array((self.s//2, self.s//2))
+        r, c = 0, 0
+        for s_ in self.Q:
+            valMax = np.argmax(s_)
+            res = ""
+            if valMax == 0:
+                res = "^"
+            elif valMax == 1:
+                res = ">"
+            elif valMax == 2:
+                res = "˅"
+            elif valMax == 3:
+                res = "<"
+            policy[r][c] = res
+            c += 1
+            if c == matrixLenght:
+                c = 0
+                r += 1
+        return policy
+
 
 class Sarsa_eligibility(IAi.IAi):
     def __init__(self, player, s, a, alpha, gama, _lambda):
@@ -237,6 +262,31 @@ class Sarsa_eligibility(IAi.IAi):
 
         self.k += 1
 
+    def getPolicy(self):
+
+        matrixLenght = int(math.sqrt(self.s))
+        policy = [["" for j in range(matrixLenght)]
+                  for i in range(matrixLenght)]
+        # policy = np.array((self.s//2, self.s//2))
+        r, c = 0, 0
+        for s_ in self.Q:
+            valMax = np.argmax(s_)
+            res = ""
+            if valMax == 0:
+                res = "^"
+            elif valMax == 1:
+                res = ">"
+            elif valMax == 2:
+                res = "˅"
+            elif valMax == 3:
+                res = "<"
+            policy[r][c] = res
+            c += 1
+            if c == matrixLenght:
+                c = 0
+                r += 1
+        return policy
+
 
 class Q_Learning(IAi.IAi):
     def __init__(self, player, s, a, alpha, gamma):
@@ -301,3 +351,28 @@ class Q_Learning(IAi.IAi):
         currentState = self.states[str(x)+str(y)]
         self.Q[self.prevState][self.prevAction] += self.alpha*(reward)
         self.k += 1
+
+    def getPolicy(self):
+
+        matrixLenght = int(math.sqrt(self.s))
+        policy = [["" for j in range(matrixLenght)]
+                  for i in range(matrixLenght)]
+        # policy = np.array((self.s//2, self.s//2))
+        r, c = 0, 0
+        for s_ in self.Q:
+            valMax = np.argmax(s_)
+            res = ""
+            if valMax == 0:
+                res = "^"
+            elif valMax == 1:
+                res = ">"
+            elif valMax == 2:
+                res = "˅"
+            elif valMax == 3:
+                res = "<"
+            policy[r][c] = res
+            c += 1
+            if c == matrixLenght:
+                c = 0
+                r += 1
+        return policy

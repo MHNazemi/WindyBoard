@@ -103,6 +103,19 @@ class WinyPathRenderer(IRenderer):
                 o_.updateOld()
                 o_.clearNewStatus()
 
+    def draw_result(self, result):
+
+        self.playerPen.hideturtle()
+        self.playerPen.color("green")
+        for x in range(len(result)):
+            for y in range(len(result[0])):
+                self.playerPen.penup()
+                self.playerPen.setpos((x-self.cellCounts//2)*self.step + self.step//2,
+                                      (y-self.cellCounts//2)*self.step + self.step//2)
+                self.playerPen.pendown()
+                self.playerPen.write(result[x][y])
+        self.playerPen.showturtle()
+
     def addObject(self, obj):
         objId = uuid.uuid4()
         self.objects[objId] = obj
